@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-go-app
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-export-sample
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: prometheus-export-sample
+    spec:
+      containers:
+        - name: prometheus-export-sample
+          image: esaka/prometheus-export-sample
+          ports:
+            - containerPort: 2112
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-go-app-service
+spec:
+  selector:
+    app: prometheus-export-sample
+  ports:
+    - protocol: TCP
+      port: 2112
+      targetPort: 2112
